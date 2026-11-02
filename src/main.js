@@ -6,7 +6,7 @@ const money = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency:
 const val = id => $(id).value.trim();
 const monthNow = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') };
 
-// Mendeteksi apakah tombol Shift Kiri ditekan
+// Pengecekan Shift Kiri
 let isLeftShiftDown = false;
 document.addEventListener('keydown', e => { if (e.code === 'ShiftLeft') isLeftShiftDown = true; });
 document.addEventListener('keyup', e => { if (e.code === 'ShiftLeft') isLeftShiftDown = false; });
@@ -35,40 +35,39 @@ document.addEventListener('DOMContentLoaded', () => {
     if(el) el.addEventListener('input', window.formatInputRibuan);
   });
 
-  // Cek sesi admin dari browser
   const isAdmin = sessionStorage.getItem('keu_admin') === 'true';
   if (isAdmin) {
     $('menuInput').classList.remove('hide');
-    $('adminBtn').classList.add('active'); // Indikator visual gear menyala
+    $('adminBtn').classList.add('hide'); // Sembunyikan ikon gerigi
+    $('logoutBtn').classList.remove('hide'); // Tampilkan tombol logout merah
   }
 
-  // Event Listener Gerigi (Shift Kiri + Klik Kiri)
-  $('adminBtn').addEventListener('click', (e) => {
-    if (isLeftShiftDown) {
-      window.loginAdmin();
+  // Klik Gerigi dengan Pop-up UI
+  $('adminBtn').addEventListener('click', () => {
+    if (isLeftShiftDown && !isAdmin) {
+      $('loginModal').classList.remove('hide');
+      setTimeout(() => $('adminUser').focus(), 100);
+    } else if (!isLeftShiftDown) {
+      // Petunjuk jika diklik biasa tanpa Shift Kiri
+      toast('Gunakan Shift Kiri + Klik untuk masuk panel admin.');
     }
   });
 });
 
-window.loginAdmin = async function() {
-  const isAdmin = sessionStorage.getItem('keu_admin') === 'true';
-  
-  // Jika sudah login, klik Shift+Klik pada gear akan menawarkan Logout
-  if (isAdmin) {
-    if (confirm('Logout dari akses Admin?')) {
-      sessionStorage.removeItem('keu_admin');
-      location.reload();
-    }
-    return;
-  }
+// Menutup Pop-up Modal Login
+window.closeLogin = function() {
+  $('loginModal').classList.add('hide');
+  $('adminUser').value = '';
+  $('adminPass').value = '';
+}
 
-  const username = prompt('Masukkan Username Admin:');
-  if (!username) return;
-  const password = prompt('Masukkan Password:');
-  if (!password) return;
+// Submit Form Modal
+window.submitLogin = async function(e) {
+  e.preventDefault();
+  const username = val('adminUser');
+  const password = val('adminPass');
   
   showLoader(true);
-  // Mengecek kombinasi ke tabel admins yang baru dibuat
   const { data, error } = await supabase
     .from('admins')
     .select('*')
@@ -81,7 +80,16 @@ window.loginAdmin = async function() {
   
   toast('Akses admin dibuka!');
   sessionStorage.setItem('keu_admin', 'true');
+  window.closeLogin();
   setTimeout(() => location.reload(), 1000);
+};
+
+// Tombol Logout Merah
+window.logoutAdmin = function() {
+  if (confirm('Yakin ingin keluar dari akses Admin?')) {
+    sessionStorage.removeItem('keu_admin');
+    location.reload();
+  }
 };
 
 window.setTheme = function(theme, save = true) {
@@ -131,9 +139,15 @@ window.loadDashboard = async function() {
 
 function render() {
   const d = state.data; if(!d) return;
-  $('monthText').textContent = d.month; $('openingNum').textContent = money(d.opening);
-  $('incomeNum').textContent = money(d.income); $('expenseNum').textContent = money(d.expense);
-  $('totalNum').textContent = money(d.total);
+  $('monthText').textContent = d.month; 
+  $('openingNum').textContent = money(d.opening);
+  $('incomeNum').textContent = money(d.income); 
+  $('expenseNum').textContent = money(d.expense);
+  
+  // Fitur Baru: Sisa Bulan Ini (Masuk - Keluar)
+  $('sisaBulanNum').textContent = money(d.income - d.expense);
+  
+  $('totalNum').textContent = money(d.total); // Sisa Sebelumnya + Masuk - Keluar
   $('openingInput').value = d.opening ? new Intl.NumberFormat('id-ID').format(d.opening) : '';
   $('limitInput').value = d.limit ? new Intl.NumberFormat('id-ID').format(d.limit) : '';
   $('nextInfo').textContent = 'Otomatis: total bulan ' + d.month + ' menjadi sisa sebelumnya bulan ' + d.nextMonth + '.';
