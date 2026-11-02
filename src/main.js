@@ -6,6 +6,11 @@ const money = n => new Intl.NumberFormat('id-ID', { style: 'currency', currency:
 const val = id => $(id).value.trim();
 const monthNow = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') };
 
+// Mendeteksi apakah tombol Shift Kiri ditekan
+let isLeftShiftDown = false;
+document.addEventListener('keydown', e => { if (e.code === 'ShiftLeft') isLeftShiftDown = true; });
+document.addEventListener('keyup', e => { if (e.code === 'ShiftLeft') isLeftShiftDown = false; });
+
 function addMonths(monthKey, count) {
   const match = monthKey.match(/^(\d{4})-(\d{2})$/);
   const date = new Date(Number(match[1]), Number(match[2]) - 1 + count, 1);
@@ -21,7 +26,7 @@ window.formatInputRibuan = function(e) {
   e.target.value = v !== '' ? new Intl.NumberFormat('id-ID').format(v) : '';
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   window.setTheme(state.theme, false);
   $('monthPicker').value = monthNow();
   window.loadDashboard();
@@ -30,35 +35,53 @@ document.addEventListener('DOMContentLoaded', async () => {
     if(el) el.addEventListener('input', window.formatInputRibuan);
   });
 
-  // Sistem Pengecekan Login
-  const { data: { session } } = await supabase.auth.getSession();
-  if (session) {
-    $('menuInput').classList.remove('hide'); // Memunculkan menu Input
-    $('loginBtn').textContent = 'Logout';    // Mengubah tombol Login jadi Logout
-    $('loginBtn').onclick = window.logoutAdmin;
+  // Cek sesi admin dari browser
+  const isAdmin = sessionStorage.getItem('keu_admin') === 'true';
+  if (isAdmin) {
+    $('menuInput').classList.remove('hide');
+    $('adminBtn').classList.add('active'); // Indikator visual gear menyala
   }
+
+  // Event Listener Gerigi (Shift Kiri + Klik Kiri)
+  $('adminBtn').addEventListener('click', (e) => {
+    if (isLeftShiftDown) {
+      window.loginAdmin();
+    }
+  });
 });
 
 window.loginAdmin = async function() {
-  const email = prompt('Masukkan Email Admin:');
-  if (!email) return;
+  const isAdmin = sessionStorage.getItem('keu_admin') === 'true';
+  
+  // Jika sudah login, klik Shift+Klik pada gear akan menawarkan Logout
+  if (isAdmin) {
+    if (confirm('Logout dari akses Admin?')) {
+      sessionStorage.removeItem('keu_admin');
+      location.reload();
+    }
+    return;
+  }
+
+  const username = prompt('Masukkan Username Admin:');
+  if (!username) return;
   const password = prompt('Masukkan Password:');
   if (!password) return;
   
   showLoader(true);
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  // Mengecek kombinasi ke tabel admins yang baru dibuat
+  const { data, error } = await supabase
+    .from('admins')
+    .select('*')
+    .eq('username', username)
+    .eq('password', password)
+    .single();
   showLoader(false);
   
-  if (error) return toast('Gagal login: ' + error.message);
-  toast('Login berhasil!');
+  if (error || !data) return toast('Username atau Password salah!');
+  
+  toast('Akses admin dibuka!');
+  sessionStorage.setItem('keu_admin', 'true');
   setTimeout(() => location.reload(), 1000);
-};
-
-window.logoutAdmin = async function() {
-  showLoader(true);
-  await supabase.auth.signOut();
-  showLoader(false);
-  location.reload();
 };
 
 window.setTheme = function(theme, save = true) {
