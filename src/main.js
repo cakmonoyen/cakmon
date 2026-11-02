@@ -111,10 +111,30 @@ function renderRows() {
   $('trxBody').innerHTML = pageRows.map(r => `<tr><td>${esc(r.created_at ? r.created_at.substring(0,10) : '')}</td><td><span class="pill ${r.type==='masuk'?'in':r.type==='keluar'?'out':'sisa'}">${esc(r.type)}</span></td><td>${esc(r.name)}</td><td>${money(r.amount)}</td></tr>`).join('');
 }
 
+async function syncNextOpening(currentMonth) {
+  const [trxRes, monthRes] = await Promise.all([
+    supabase.from('transactions').select('amount, type').eq('month', currentMonth),
+    supabase.from('months').select('opening_balance').eq('month', currentMonth).maybeSingle()
+  ]);
+
+  let income = 0; let expense = 0;
+  (trxRes.data || []).forEach(t => {
+    if (t.type === 'masuk') income += Number(t.amount);
+    if (t.type === 'keluar') expense += Number(t.amount);
+  });
+
+  const opening = monthRes.data?.opening_balance || 0;
+  const total = opening + income - expense;
+  const nextMonth = addMonths(currentMonth, 1);
+
+  await supabase.from('months').upsert({ month: nextMonth, opening_balance: total, updated_at: new Date() });
+}
+
 window.saveOpening = async function(e) {
   e.preventDefault(); showLoader(true);
   const month = $('monthPicker').value; const amount = unformatRibuan(val('openingInput'));
   const { error } = await supabase.from('months').upsert({ month, opening_balance: amount, updated_at: new Date() });
+  if (!error) await syncNextOpening(month);
   showLoader(false);
   if (error) return toast(error.message);
   toast('Sisa tersimpan.'); window.loadDashboard();
@@ -131,8 +151,10 @@ window.saveLimit = async function(e) {
 
 window.addTransaction = async function(e) {
   e.preventDefault(); showLoader(true);
-  const payload = { month: $('monthPicker').value, type: val('trxType'), name: val('trxName'), amount: unformatRibuan(val('trxAmount')) };
+  const month = $('monthPicker').value;
+  const payload = { month, type: val('trxType'), name: val('trxName'), amount: unformatRibuan(val('trxAmount')) };
   const { error } = await supabase.from('transactions').insert([payload]);
+  if (!error) await syncNextOpening(month);
   showLoader(false);
   if (error) return toast(error.message);
   $('trxName').value = ''; $('trxAmount').value = '';
