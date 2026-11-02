@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
 <title>Pencatatan Keuangan</title>
 <style>
-/* Masukkan semua baris CSS persis sama dari Index.html asli (baris 6 sampai 34) */
 :root{--bg:#f3f6fb;--card:#fff;--text:#101828;--muted:#667085;--line:#e4e7ec;--primary:#2563eb;--primary2:#1d4ed8;--green:#079455;--red:#d92d20;--orange:#dc6803;--soft:#eef4ff;--shadow:0 12px 30px rgba(16,24,40,.08);--radius:20px;--safe:env(safe-area-inset-bottom,0px)}
 body[data-theme=dark]{--bg:#07111f;--card:#101828;--text:#f9fafb;--muted:#98a2b3;--line:#263449;--primary:#60a5fa;--primary2:#3b82f6;--green:#32d583;--red:#f97066;--orange:#fdb022;--soft:#18283d;--shadow:0 14px 35px rgba(0,0,0,.34)}
 body[data-theme=pink]{--bg:#fff1f7;--card:#fff;--text:#3b1022;--muted:#8a5269;--line:#ffd0e2;--primary:#db2777;--primary2:#be185d;--green:#079455;--red:#d92d20;--orange:#dc6803;--soft:#fce7f3;--shadow:0 14px 35px rgba(219,39,119,.12)}
@@ -28,19 +27,21 @@ button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.hide{d
 </style>
 </head>
 <body>
-<!-- HTML UI sama persis dengan Index.html -->
 <section id="main" class="app">
   <div class="top">
     <div class="top-main"><div class="top-left"><div><h2>Pencatatan</h2><p class="muted" id="monthText">Memuat...</p></div></div></div>
     <div class="top-actions">
       <input class="input" id="monthPicker" type="month" onchange="window.loadDashboard()" style="max-width:160px">
+      <!-- Tombol Login (Akan berubah menjadi Logout jika sudah masuk) -->
+      <button type="button" class="btn btn-lite btn-mini" id="loginBtn" onclick="window.loginAdmin()">Login</button>
       <button type="button" class="btn btn-lite btn-mini" id="themeBtn" onclick="window.cycleTheme()" title="Ganti tema">☀️</button>
     </div>
   </div>
 
   <nav class="menu">
     <button class="menu-btn active" id="menuHome" onclick="window.setView('home')">Beranda</button>
-    <button class="menu-btn" id="menuInput" onclick="window.setView('input')">Input</button>
+    <!-- Menu Input disembunyikan secara bawaan dengan class "hide" -->
+    <button class="menu-btn hide" id="menuInput" onclick="window.setView('input')">Input</button>
   </nav>
 
   <div class="wrap">
@@ -101,7 +102,6 @@ button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.hide{d
 <div id="toast" class="toast hide"></div>
 <div id="loader" class="loader hide">Memproses...</div>
 
-<!-- Injeksi script utama -->
 <script type="module" src="/src/main.js"></script>
 </body>
 </html>
