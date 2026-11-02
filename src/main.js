@@ -21,7 +21,7 @@ window.formatInputRibuan = function(e) {
   e.target.value = v !== '' ? new Intl.NumberFormat('id-ID').format(v) : '';
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   window.setTheme(state.theme, false);
   $('monthPicker').value = monthNow();
   window.loadDashboard();
@@ -29,7 +29,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const el = $(id);
     if(el) el.addEventListener('input', window.formatInputRibuan);
   });
+
+  // Sistem Pengecekan Login
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session) {
+    $('menuInput').classList.remove('hide'); // Memunculkan menu Input
+    $('loginBtn').textContent = 'Logout';    // Mengubah tombol Login jadi Logout
+    $('loginBtn').onclick = window.logoutAdmin;
+  }
 });
+
+window.loginAdmin = async function() {
+  const email = prompt('Masukkan Email Admin:');
+  if (!email) return;
+  const password = prompt('Masukkan Password:');
+  if (!password) return;
+  
+  showLoader(true);
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  showLoader(false);
+  
+  if (error) return toast('Gagal login: ' + error.message);
+  toast('Login berhasil!');
+  setTimeout(() => location.reload(), 1000);
+};
+
+window.logoutAdmin = async function() {
+  showLoader(true);
+  await supabase.auth.signOut();
+  showLoader(false);
+  location.reload();
+};
 
 window.setTheme = function(theme, save = true) {
   if(!['light','dark','pink'].includes(theme)) theme = 'light';
