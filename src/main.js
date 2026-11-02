@@ -38,29 +38,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const isAdmin = sessionStorage.getItem('keu_admin') === 'true';
   if (isAdmin) {
     $('menuInput').classList.remove('hide');
-    $('adminBtn').classList.add('hide'); // Sembunyikan ikon gerigi
-    $('logoutBtn').classList.remove('hide'); // Tampilkan tombol logout merah
+    $('adminBtn').classList.add('hide'); 
+    $('logoutBtn').classList.remove('hide'); 
   }
 
-  // Klik Gerigi dengan Pop-up UI
+  // Klik Gerigi - Tidak ada toast jika diklik biasa
   $('adminBtn').addEventListener('click', () => {
     if (isLeftShiftDown && !isAdmin) {
       $('loginModal').classList.remove('hide');
       setTimeout(() => $('adminUser').focus(), 100);
-    } else if (!isLeftShiftDown) {
-      toast('Tahan Shift Kiri + Klik untuk masuk panel admin.');
     }
   });
 });
 
-// Menutup Pop-up Modal Login
 window.closeLogin = function() {
   $('loginModal').classList.add('hide');
   $('adminUser').value = '';
   $('adminPass').value = '';
 }
 
-// Submit Form Modal
 window.submitLogin = async function(e) {
   e.preventDefault();
   const username = val('adminUser');
@@ -83,7 +79,6 @@ window.submitLogin = async function(e) {
   setTimeout(() => location.reload(), 1000);
 };
 
-// Tombol Logout Merah
 window.logoutAdmin = function() {
   if (confirm('Yakin ingin keluar dari akses Admin?')) {
     sessionStorage.removeItem('keu_admin');
@@ -99,10 +94,22 @@ window.setTheme = function(theme, save = true) {
   $('themeBtn').textContent = theme === 'dark' ? '🌙' : theme === 'pink' ? '🌸' : '☀️';
 }
 window.cycleTheme = function() { window.setTheme(state.theme === 'light' ? 'dark' : state.theme === 'dark' ? 'pink' : 'light') }
+
+// Pengaturan Navigasi Ikon Top Bar
 window.setView = function(view) {
   state.view = view;
   ['home','input'].forEach(v => { $('view' + v.charAt(0).toUpperCase() + v.slice(1)).classList.toggle('active', v === view) });
-  ['Home','Input'].forEach(v => { $('menu' + v).classList.toggle('active', v.toLowerCase() === view) });
+  
+  ['Home','Input'].forEach(v => { 
+    const btn = $('menu' + v);
+    if(btn) {
+      if(v.toLowerCase() === view) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    }
+  });
 }
 
 window.loadDashboard = async function() {
@@ -143,10 +150,10 @@ function render() {
   $('incomeNum').textContent = money(d.income); 
   $('expenseNum').textContent = money(d.expense);
   
-  // Fitur Baru: Sisa Bulan Ini (Masuk - Keluar)
+  // Sisa Bulan Ini (Masuk - Keluar)
   $('sisaBulanNum').textContent = money(d.income - d.expense);
   
-  $('totalNum').textContent = money(d.total); // Sisa Sebelumnya + Masuk - Keluar
+  $('totalNum').textContent = money(d.total); 
   $('openingInput').value = d.opening ? new Intl.NumberFormat('id-ID').format(d.opening) : '';
   $('limitInput').value = d.limit ? new Intl.NumberFormat('id-ID').format(d.limit) : '';
   $('nextInfo').textContent = 'Otomatis: total bulan ' + d.month + ' menjadi sisa sebelumnya bulan ' + d.nextMonth + '.';
