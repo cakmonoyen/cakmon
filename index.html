@@ -32,15 +32,14 @@ button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.hide{d
     <div class="top-main"><div class="top-left"><div><h2>Pencatatan</h2><p class="muted" id="monthText">Memuat...</p></div></div></div>
     <div class="top-actions">
       <input class="input" id="monthPicker" type="month" onchange="window.loadDashboard()" style="max-width:160px">
-      <!-- Tombol Login (Akan berubah menjadi Logout jika sudah masuk) -->
-      <button type="button" class="btn btn-lite btn-mini" id="loginBtn" onclick="window.loginAdmin()">Login</button>
+      <!-- Tombol Login (Ikon Gerigi) -->
+      <button type="button" class="btn btn-lite btn-mini" id="adminBtn" title="Panel">⚙️</button>
       <button type="button" class="btn btn-lite btn-mini" id="themeBtn" onclick="window.cycleTheme()" title="Ganti tema">☀️</button>
     </div>
   </div>
 
   <nav class="menu">
     <button class="menu-btn active" id="menuHome" onclick="window.setView('home')">Beranda</button>
-    <!-- Menu Input disembunyikan secara bawaan dengan class "hide" -->
     <button class="menu-btn hide" id="menuInput" onclick="window.setView('input')">Input</button>
   </nav>
 
