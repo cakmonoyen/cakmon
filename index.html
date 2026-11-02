@@ -14,16 +14,27 @@ button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.hide{d
 .app{min-height:100svh;padding:14px 14px calc(82px + var(--safe))}
 .top{display:grid;grid-template-columns:1fr;gap:10px;margin-bottom:12px}.top-main{display:flex;align-items:center;justify-content:space-between;gap:10px}.top-left{display:flex;align-items:center;gap:11px;min-width:0}.top h2{font-size:19px}.top-actions{display:flex;justify-content:flex-end;gap:8px;align-items:center}
 .input{width:100%;max-width:100%;border:1px solid var(--line);border-radius:13px;padding:11px 13px;background:var(--card);color:var(--text);outline:0;min-height:44px}.input:focus{border-color:var(--primary);box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 15%,transparent)}
-.btn{width:100%;border-radius:13px;padding:11px 15px;background:var(--primary);color:#fff;font-weight:900;min-height:44px}.btn:active{transform:scale(.99)}.btn-lite{background:var(--soft);color:var(--primary)}.btn-mini{width:auto;min-height:38px;padding:8px 11px;border-radius:11px;font-size:12px}
+.btn{width:100%;border-radius:13px;padding:11px 15px;background:var(--primary);color:#fff;font-weight:900;min-height:44px}.btn:active{transform:scale(.99)}.btn-lite{background:var(--soft);color:var(--primary)}.btn-mini{width:auto;min-height:38px;padding:8px 11px;border-radius:11px;font-size:12px}.btn-red{background:var(--red);color:#fff}
 .menu{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:0 auto 12px;max-width:400px}.menu-btn{border-radius:14px;padding:10px 5px;background:var(--card);border:1px solid var(--line);color:var(--muted);font-size:13px;font-weight:950}.menu-btn.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 .wrap{display:grid;gap:12px}.view{display:none;gap:12px}.view.active{display:grid}.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:14px;min-width:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat .label{font-size:11px;color:var(--muted);font-weight:900}.stat .num{font-size:17px;font-weight:950;margin-top:8px;word-break:break-word}.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.section-title h3{font-size:17px}.filters{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.chip{padding:9px 8px;border-radius:999px;background:var(--soft);color:var(--muted);font-weight:950;font-size:12px}.chip.active{background:var(--primary);color:#fff}
 .stack{display:grid;gap:12px}.limit-box{display:grid;gap:10px;padding:12px;border:1px solid var(--line);border-radius:17px;background:var(--bg)}.progress{height:10px;border-radius:999px;background:var(--line);overflow:hidden}.bar{height:100%;width:0;background:var(--primary)}.bar.warn{background:var(--orange)}.bar.danger{background:var(--red)}
 .inline-form{display:grid;grid-template-columns:1fr;gap:8px}.field{display:grid;gap:6px;margin-bottom:10px}.field label{font-size:12px;font-weight:900}.table-wrap{width:100%;max-width:100%;overflow:auto;border:1px solid var(--line);border-radius:15px;-webkit-overflow-scrolling:touch}.data-table{width:100%;min-width:400px;border-collapse:separate;border-spacing:0;background:var(--card)}.data-table th,.data-table td{padding:11px;border-bottom:1px solid var(--line);border-right:1px solid var(--line);text-align:left;vertical-align:middle;font-size:12px}.data-table th{background:#111827;color:#fff;font-weight:950;position:sticky;top:0;z-index:2}.data-table tr:last-child td{border-bottom:0}
 .table-mobile-shell{position:relative}.pill{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:5px 9px;font-weight:950;font-size:11px}.pill.in{background:#dcfae6;color:#067647}.pill.out{background:#fee4e2;color:#b42318}.pill.sisa{background:#dbeafe;color:#1d4ed8}.empty{padding:24px;text-align:center;color:var(--muted)}
 .pager{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px}.pager-info{font-size:12px;color:var(--muted);font-weight:900;text-align:center}.footer{max-width:1180px;margin:14px auto 0;text-align:center;color:var(--muted);font-size:12px;line-height:1.6}
-.toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#111827;color:#fff;border-radius:999px;padding:12px 17px;box-shadow:var(--shadow);z-index:60;max-width:92%;text-align:center;font-size:13px;font-weight:900}.loader{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:11px 17px;box-shadow:var(--shadow);z-index:55;font-size:13px;font-weight:950}
+.toast{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:#111827;color:#fff;border-radius:999px;padding:12px 17px;box-shadow:var(--shadow);z-index:60;max-width:92%;text-align:center;font-size:13px;font-weight:900}
+
+/* Modal UI Pop-up Login */
+.modal{position:fixed;inset:0;background:rgba(17,24,39,.7);backdrop-filter:blur(3px);z-index:100;display:flex;align-items:center;justify-content:center;padding:14px}
+.modal-content{width:100%;max-width:320px}
+
+/* Kucing Joget Loading UI */
+.loader{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);z-index:999;display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--text);font-weight:950;font-size:14px;background:var(--card);padding:20px;border-radius:24px;box-shadow:var(--shadow);border:1px solid var(--line)}
+.loader img{width:80px;border-radius:15px}
+
 @media (max-width:699px){.app{padding-left:12px;padding-right:12px}.top,.wrap{width:100%;max-width:480px;margin-left:auto;margin-right:auto}.card{overflow:hidden}.table-card{overflow:visible}.table-card .table-wrap{max-height:430px;touch-action:pan-x pan-y}.data-table th:first-child,.data-table td:first-child{display:none}.data-table th,.data-table td{padding:10px 9px;font-size:11px}}
-@media (min-width:700px){.app{padding:18px 18px 24px}.top{max-width:1180px;margin:0 auto 14px;grid-template-columns:1fr auto}.wrap{max-width:1180px;margin:0 auto}.grid{grid-template-columns:repeat(4,1fr)}.stat .label{font-size:13px}.stat .num{font-size:25px}.card{padding:18px}.stack.two{grid-template-columns:360px 1fr}.data-table{width:100%}}
+@media (min-width:700px){.app{padding:18px 18px 24px}.top{max-width:1180px;margin:0 auto 14px;grid-template-columns:1fr auto}.wrap{max-width:1180px;margin:0 auto}
+/* Berubah jadi 5 kolom untuk menampung Sisa Bulan Ini */
+.grid{grid-template-columns:repeat(5,1fr)}.stat .label{font-size:13px}.stat .num{font-size:20px}.card{padding:18px}.stack.two{grid-template-columns:360px 1fr}.data-table{width:100%}}
 </style>
 </head>
 <body>
@@ -32,8 +43,9 @@ button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.hide{d
     <div class="top-main"><div class="top-left"><div><h2>Pencatatan</h2><p class="muted" id="monthText">Memuat...</p></div></div></div>
     <div class="top-actions">
       <input class="input" id="monthPicker" type="month" onchange="window.loadDashboard()" style="max-width:160px">
-      <!-- Tombol Login (Ikon Gerigi) -->
-      <button type="button" class="btn btn-lite btn-mini" id="adminBtn" title="Panel">⚙️</button>
+      <!-- Tombol Admin (Ikon Gerigi) & Logout (Merah) -->
+      <button type="button" class="btn btn-lite btn-mini" id="adminBtn" title="Shift Kiri + Klik Kiri">⚙️</button>
+      <button type="button" class="btn btn-red btn-mini hide" id="logoutBtn" onclick="window.logoutAdmin()">Logout</button>
       <button type="button" class="btn btn-lite btn-mini" id="themeBtn" onclick="window.cycleTheme()" title="Ganti tema">☀️</button>
     </div>
   </div>
@@ -49,7 +61,9 @@ button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.hide{d
         <div class="card stat"><div class="label">Sisa Sebelumnya</div><div class="num blue" id="openingNum">Rp0</div></div>
         <div class="card stat"><div class="label">Masuk</div><div class="num green" id="incomeNum">Rp0</div></div>
         <div class="card stat"><div class="label">Keluar</div><div class="num red" id="expenseNum">Rp0</div></div>
-        <div class="card stat"><div class="label">Total</div><div class="num" id="totalNum">Rp0</div></div>
+        <!-- KARTU BARU: Menampilkan selisih Masuk - Keluar bulan ini saja -->
+        <div class="card stat"><div class="label">Sisa Bulan Ini</div><div class="num orange" id="sisaBulanNum">Rp0</div></div>
+        <div class="card stat"><div class="label">Total Keseluruhan</div><div class="num" id="totalNum">Rp0</div></div>
       </div>
       <div class="card table-card">
         <div class="section-title"><div><h3>Data Transaksi</h3></div><button class="btn btn-lite btn-mini" onclick="window.loadDashboard()">Refresh</button></div>
@@ -98,8 +112,29 @@ button,input,select,textarea{font:inherit}button{border:0;cursor:pointer}.hide{d
   <footer class="footer">© Vercel + Supabase Migration</footer>
 </section>
 
+<!-- POP-UP UI MODAL LOGIN -->
+<div id="loginModal" class="modal hide">
+  <div class="modal-content card stack">
+    <h3 style="margin-bottom:8px">Login Admin</h3>
+    <p class="muted" style="margin-top:-10px;margin-bottom:10px">Masukkan kredensial tabel admins.</p>
+    <form onsubmit="window.submitLogin(event)">
+      <div class="field"><label>Username</label><input class="input" id="adminUser" required></div>
+      <div class="field"><label>Password</label><input class="input" type="password" id="adminPass" required></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px;">
+        <button type="button" class="btn btn-lite" onclick="window.closeLogin()">Batal</button>
+        <button type="submit" class="btn">Masuk</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div id="toast" class="toast hide"></div>
-<div id="loader" class="loader hide">Memproses...</div>
+
+<!-- ANIMASI LOADING KUCING JOGET -->
+<div id="loader" class="loader hide">
+  <img src="https://media.tenor.com/Z-a1B057HSAAAAAC/cat-dance.gif" alt="Kucing Joget">
+  Memuat Data...
+</div>
 
 <script type="module" src="/src/main.js"></script>
 </body>
