@@ -48,8 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
       $('loginModal').classList.remove('hide');
       setTimeout(() => $('adminUser').focus(), 100);
     } else if (!isLeftShiftDown) {
-      // Petunjuk jika diklik biasa tanpa Shift Kiri
-      toast('Gunakan Shift Kiri + Klik untuk masuk panel admin.');
+      toast('Tahan Shift Kiri + Klik untuk masuk panel admin.');
     }
   });
 });
